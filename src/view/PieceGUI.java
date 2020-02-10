@@ -12,6 +12,11 @@ public class PieceGUI extends ImageView implements ChessPieceGui {
 
         this.couleur= pieceSquareColor;
         this.setImage(image);
+        this.setFitHeight(GuiFactory.height.getValue()/GuiFactory.nbLigne.getValue());
+        this.setFitHeight(GuiFactory.height.getValue()/GuiFactory.nbColonne.getValue());
+
+        //this.setY(GuiFactory.height.getValue()/GuiFactory.nbLigne.getValue());
+        //this.setX(GuiFactory.height.getValue()/GuiFactory.nbColonne.getValue());
     }
 
     @Override

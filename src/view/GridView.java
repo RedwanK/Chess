@@ -133,7 +133,6 @@ public class GridView extends GridPane implements ChessView {
 
         @Override
         public void handle (DragEvent event) {
-            System.out.println("zobzob");
             // D�placement de la pi�ce s�lectionn�e
             GridView.this.movePiece(
                     new GUICoord((int) GridView.this.getSelectedPiece().getLayoutX(),
