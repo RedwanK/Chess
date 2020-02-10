@@ -3,7 +3,7 @@ package view;
 import controller.ChessController;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import shared.GUICoord;
@@ -14,14 +14,14 @@ import java.util.List;
 public class GridView extends GridPane implements ChessView {
 
     private ChessController controller = null;
-    private Canvas selectedPieceGui;					// la pi�ce � d�placer
+    private PieceGUI selectedPieceGui;					// la pi�ce � d�placer
     private int selectedPieceIndex;						// index de la pi�ce avant d�placement
 
     private int nbCol;
     private int nbLig;                			// le nb de ligne et de colonne du damier
     private double height;								// taille du damier en pixel
 
-    private EventHandler<MouseEvent> squareListener;   	// l'�couteur d'�v�nements souris sur les carr�s du damier
+    private EventHandler<DragEvent> squareListener;   	// l'�couteur d'�v�nements souris sur les carr�s du damier
     private EventHandler<MouseEvent> pieceListener;   	// l'�couteur d'�v�nements souris sur les pi�ces
 
     public GridView (ChessController controller) {
@@ -33,14 +33,14 @@ public class GridView extends GridPane implements ChessView {
 
         this.controller = controller;
 
-//        this.squareListener = new SquareListener();
-//        this.pieceListener = new PieceListener();
+        this.squareListener = new SquareListener();
+        this.pieceListener = new PieceListener();
 
         // initialisation du damier
-        this.addSquaresOnCheckersBoard();
+        this.addSquaresAndPiecesOnCheckersBoard();
     }
 
-    private void addSquaresOnCheckersBoard () {
+    private void addSquaresAndPiecesOnCheckersBoard () {
 
         PieceGUI piece = null;
         SquareGUI square = null;
@@ -54,7 +54,7 @@ public class GridView extends GridPane implements ChessView {
                 square =(SquareGUI) GuiFactory.createSquare(col, ligne);
 
                 // ajout d'un �couteur sur le carr�
-                //square.setOnMouseClicked(squareListener);
+                square.setOnDragDropped(this.squareListener);
 
                 // gestion de la taille des Pane
                 square.setPrefHeight(this.height/this.nbLig);	// TODO - � remplacer : bad practice
@@ -64,7 +64,10 @@ public class GridView extends GridPane implements ChessView {
 
                 // ajout du carre sur le damier
                 if(piece != null) {
-                    System.out.println(piece);
+                    // ajout d'un �couteur de souris
+                    // si la pi�ce est s�lectionn�e, elle sera supprim� de son emplacement actuel
+                    // et repositionn�e sur une autre case
+                    piece.setOnDragDetected(this.pieceListener);
                     square.getChildren().add(piece);
                 }
 
@@ -85,7 +88,10 @@ public class GridView extends GridPane implements ChessView {
 
     @Override
     public void movePiece(GUICoord initCoord, GUICoord targetCoord) {
-
+        System.out.println("INIT");
+        System.out.println(initCoord);
+        System.out.println("FINISH");
+        System.out.println(targetCoord);
     }
 
     @Override
@@ -100,6 +106,68 @@ public class GridView extends GridPane implements ChessView {
 
     @Override
     public void promotePiece(GUICoord gUICoord, String promotionType) {
+
+    }
+
+    private PieceGUI getSelectedPiece() {
+        return this.selectedPieceGui;
+    }
+    private int getSelectedPieceIndex() {
+        return this.selectedPieceIndex;
+    }
+
+    private void setSelectedPiece (PieceGUI selectedPieceGui) {
+        this.selectedPieceGui =  selectedPieceGui;
+    }
+    private void setSelectedPieceIndex (int selectedPieceIndex) {
+        this.selectedPieceIndex =  selectedPieceIndex;
+    }
+
+    /**
+     * @author francoise.perrin
+     *
+     * Objet qui �coute les �v�nements Souris sur les cases du damier
+     * et agit en cons�quence
+     */
+    private class SquareListener implements EventHandler<DragEvent> {
+
+        @Override
+        public void handle (DragEvent event) {
+            System.out.println("zobzob");
+            // D�placement de la pi�ce s�lectionn�e
+            GridView.this.movePiece(
+                    new GUICoord((int) GridView.this.getSelectedPiece().getLayoutX(),
+                            (int) GridView.this.getSelectedPiece().getLayoutY()),
+                    new GUICoord((int) event.getX(),(int) event.getY())
+            );
+            GridView.this.setSelectedPiece(null);
+            // On �vite que le parent ne r�cup�re l'event
+            event.consume();
+        }
+    }
+
+    /**
+     * @author francoise.perrin
+     *
+     * Objet qui �coute les �v�nements Souris sur les cases du damier
+     * et agit en cons�quence
+     */
+    private class PieceListener implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle (MouseEvent mouseEvent) {
+            /* allow any transfer mode */
+            Dragboard db = GridView.this.startDragAndDrop(TransferMode.ANY);
+
+            GridView.this.setSelectedPiece((PieceGUI) mouseEvent.getSource());
+
+            ClipboardContent content = new ClipboardContent();
+            PieceGUI piece = (PieceGUI) mouseEvent.getSource();
+            content.putImage(piece.getImage());
+            db.setContent(content);
+
+            mouseEvent.consume();
+        }
 
     }
 }

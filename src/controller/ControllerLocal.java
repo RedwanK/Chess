@@ -35,4 +35,5 @@ public class ControllerLocal implements ChessControllerView, ChessControllerMode
     public void actionsWhenPieceIsReleasedOnGui(GUICoord targetCoord) {
 
     }
+
 }
