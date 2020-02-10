@@ -2,6 +2,7 @@ package launcher;
 
 
 
+import controller.ControllerLocal;
 import javafx.application.Application;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,8 +14,10 @@ import controller.ChessController;
 import controller.ChessControllerModel;
 import controller.ChessControllerView;
 import model.ChessModel;
+import model.Model;
 import view.ChessView;
 import view.GuiFactory;
+import view.View;
 
 /**
  * @author francoise.perrin

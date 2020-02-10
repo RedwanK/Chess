@@ -49,7 +49,7 @@ public class GuiFactory {
 		}
 		GUICoord gUICoord = new GUICoord(col, ligne);
 		
-		square = new SquareGui(gUICoord, squareColor);
+		square = new SquareGUI(gUICoord, squareColor);
 		
 		return square;
 	}

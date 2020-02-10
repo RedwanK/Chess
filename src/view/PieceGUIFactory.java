@@ -28,7 +28,7 @@ public class PieceGUIFactory {
 	private static Map<String, List<GUICoord>> mapPieceInitCoords = new HashMap<String, List<GUICoord>>();
 	private static Map<String, String> mapPieceImage = new HashMap<String, String> ();
 	private static Map<PieceSquareColor, List<String>> mapPieceColor = new HashMap<PieceSquareColor, List<String>> ();
-
+	private static String imagePrefix = ".\\images\\";
 	static {	
 		mapPieceInitCoords.put("TourWHITE", Arrays.asList(new GUICoord[] {new GUICoord(0,7), new GUICoord(7,7)}));
 		mapPieceInitCoords.put("CavalierWHITE", Arrays.asList(new GUICoord[] {new GUICoord(1,7), new GUICoord(6,7)}));
@@ -47,19 +47,19 @@ public class PieceGUIFactory {
 	}
 
 	static {	
-		mapPieceImage.put("TourWHITE", "tourBlancS.png");
-		mapPieceImage.put("CavalierWHITE", "cavalierBlancS.png");
-		mapPieceImage.put("FouWHITE",  "fouBlancS.png");
-		mapPieceImage.put("ReineWHITE", "reineBlancS.png");
-		mapPieceImage.put("RoiWHITE", "roiBlancS.png");
-		mapPieceImage.put("PionWHITE", "pionBlancS.png");
+		mapPieceImage.put("TourWHITE", imagePrefix+"tourBlancS.png");
+		mapPieceImage.put("CavalierWHITE", imagePrefix+"cavalierBlancS.png");
+		mapPieceImage.put("FouWHITE",  imagePrefix+"fouBlancS.png");
+		mapPieceImage.put("ReineWHITE", imagePrefix+"reineBlancS.png");
+		mapPieceImage.put("RoiWHITE", imagePrefix+"roiBlancS.png");
+		mapPieceImage.put("PionWHITE", imagePrefix+"pionBlancS.png");
 
-		mapPieceImage.put("TourBLACK", "tourNoireS.png");
-		mapPieceImage.put("CavalierBLACK", "cavalierNoirS.png");
-		mapPieceImage.put("FouBLACK", "fouNoirS.png");
-		mapPieceImage.put("ReineBLACK", "reineNoireS.png");
-		mapPieceImage.put("RoiBLACK", "roiNoirS.png");
-		mapPieceImage.put("PionBLACK", "pionNoirS.png")  ;
+		mapPieceImage.put("TourBLACK", imagePrefix+"tourNoireS.png");
+		mapPieceImage.put("CavalierBLACK", imagePrefix+"cavalierNoirS.png");
+		mapPieceImage.put("FouBLACK", imagePrefix+"fouNoirS.png");
+		mapPieceImage.put("ReineBLACK", imagePrefix+"reineNoireS.png");
+		mapPieceImage.put("RoiBLACK", imagePrefix+"roiNoirS.png");
+		mapPieceImage.put("PionBLACK", imagePrefix+"pionNoirS.png")  ;
 	}
 
 	static {	
@@ -93,7 +93,7 @@ public class PieceGUIFactory {
 				image = createImage(pieceType);		
 				
 				// création pièce
-				chessPieceGUI = new PieceGui( pieceSquareColor,  image );
+				chessPieceGUI = new PieceGUI( pieceSquareColor,  image );
 			}
 		}
 		
@@ -101,7 +101,7 @@ public class PieceGUIFactory {
 	}
 
 	public static ChessPieceGui createChessPieceGUI(String promotionType, PieceSquareColor pieceSquareColor) {
-		return new PieceGui(pieceSquareColor, createImage(promotionType + pieceSquareColor.name()) );
+		return new PieceGUI(pieceSquareColor, createImage(promotionType + pieceSquareColor.name()) );
 	}
 
 	private static Image createImage(String pieceType) {

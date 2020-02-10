@@ -1,7 +1,7 @@
 package view;
 
 
-import chessNutsAndBolts.GUICoord;
+import shared.GUICoord;
 
 /**
  * @author francoiseperrin
