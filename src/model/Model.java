@@ -13,7 +13,7 @@ public class Model implements ChessModel {
 
     @Override
     public ActionType move(ModelCoord initCoord, ModelCoord finalCoord) {
-        return null;
+        return ActionType.MOVE;
     }
 
     @Override

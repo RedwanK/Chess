@@ -64,7 +64,6 @@ public class GridView extends GridPane implements ChessView {
 
                 // ajout du carre sur le damier
                 if(piece != null) {
-                    System.out.println(piece);
                     square.getChildren().add(piece);
                 }
 
