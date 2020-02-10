@@ -57,7 +57,7 @@ public class GuiFactory {
 	public static ChessPieceGui createPiece(int col, int ligne) {
 		return PieceGUIFactory.createChessPieceGUI(new GUICoord(col, ligne) );
 	}
-	
+
 	public static ChessPieceGui createPiece(String promotionType, PieceSquareColor pieceSquareColor) {
 		return PieceGUIFactory.createChessPieceGUI(promotionType, pieceSquareColor);
 	}

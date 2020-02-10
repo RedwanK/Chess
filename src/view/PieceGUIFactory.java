@@ -28,8 +28,8 @@ public class PieceGUIFactory {
 	private static Map<String, List<GUICoord>> mapPieceInitCoords = new HashMap<String, List<GUICoord>>();
 	private static Map<String, String> mapPieceImage = new HashMap<String, String> ();
 	private static Map<PieceSquareColor, List<String>> mapPieceColor = new HashMap<PieceSquareColor, List<String>> ();
-	private static String imagePrefix = ".\\images\\";
-	static {	
+	private static String imagePrefix = "";
+	static {
 		mapPieceInitCoords.put("TourWHITE", Arrays.asList(new GUICoord[] {new GUICoord(0,7), new GUICoord(7,7)}));
 		mapPieceInitCoords.put("CavalierWHITE", Arrays.asList(new GUICoord[] {new GUICoord(1,7), new GUICoord(6,7)}));
 		mapPieceInitCoords.put("FouWHITE", Arrays.asList(new GUICoord[] {new GUICoord(2,7), new GUICoord(5,7)}));
@@ -112,7 +112,7 @@ public class PieceGUIFactory {
 		
 		nomImageFile = mapPieceImage.get(pieceType);
 		
-		pieceImageFile = g.getAbsolutePath()+"/images/" + nomImageFile;		// TODO : Attention au chemin
+		pieceImageFile = g.getAbsolutePath()+"/src/images/" + nomImageFile;
 		try {
 			image = new Image(new FileInputStream(pieceImageFile));
 		} catch (FileNotFoundException e) {
