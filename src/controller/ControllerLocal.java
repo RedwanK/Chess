@@ -18,12 +18,12 @@ public class ControllerLocal implements ChessControllerView, ChessControllerMode
 
     @Override
     public boolean actionsWhenPieceIsSelectedOnGui(PieceSquareColor pieceSquareColor, GUICoord pieceToMoveCoord) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean actionsWhenPieceIsDraggedOnGui(PieceSquareColor pieceSquareColor, GUICoord pieceToMoveCoord) {
-        return false;
+        return true;
     }
 
     @Override

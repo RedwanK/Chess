@@ -2,6 +2,8 @@ package view;
 
 import controller.ChessController;
 import controller.ControllerLocal;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -11,54 +13,86 @@ import java.util.List;
 
 public class View extends GridPane implements ChessView {
 
+    // le damier composé de carrés noirs et blancs
+    // sur lesquels sont positionnés des pièces noires ou blanches
+    GridView gridView ;
+
     public View(ChessController controller) {
         super();
 
-        // le damier compos� de carr�s noirs et blancs
-        // sur lesquels sont positionn�s des pi�ces noires ou blanches
-        GridView board = new GridView(controller);
+        Pane board = new GridView(controller);
+        gridView = (GridView) board;
 
-        // gestion de la taille du damier
-        double height =(double) GuiFactory.height.getValue();			// TODO - � remplacer (atelier 4) : bad practice
-        board.setPrefSize( height, height);			// TODO - � remplacer (atelier 4) : bad practice
 
-        // cr�ation d'un fond d'�cran qui contiendra le damier + les axes (atelier 2)
+        board.prefWidthProperty().bind(this.widthProperty());
+        board.prefHeightProperty().bind(this.heightProperty());
+
+        // ajout du damier et des axes à la vue
         BorderPane checkersBoard = new BorderPane();
-
-        // ajout du damier au centre du fond d'�cran
+        checkersBoard.setTop(createHorizontalAxis());
+        checkersBoard.setBottom(createHorizontalAxis());
+        checkersBoard.setLeft(createVerticalAxis());
+        checkersBoard.setRight(createVerticalAxis());
         checkersBoard.setCenter(board);
-
-        // ajout du fond d'�cran � la vue
         this.add(checkersBoard, 0, 1);
+
+
     }
 
-    @Override
-    public void setPieceToMoveVisible(GUICoord gUICoord, boolean visible) {
+    private GridPane createHorizontalAxis() {
+        GridPane pane = new GridPane();
 
+        for (char c = 'a'; c<='h'; c++){
+            Label label1 = new Label(String.valueOf(c));
+            label1.setAlignment(Pos.CENTER);
+            label1.setPrefHeight(10);
+            label1.setPrefWidth(100);
+            pane.add(label1, c-'a', 0);
+        }
+        return pane;
+    }
+
+    private GridPane createVerticalAxis() {
+        GridPane pane = new GridPane();
+        for (int c = 8; c>=1; c--){
+            Label label1 = new Label(String.valueOf(c));
+            label1.setPrefHeight(100);
+            label1.setPrefWidth(15);
+            pane.add(label1, 0, 8-c+1);
+        }
+        return pane;
+    }
+
+
+    @Override
+    public void setPieceToMoveVisible(GUICoord gUICoord, boolean visible){
+        this.gridView.setPieceToMoveVisible( gUICoord, visible);
     }
 
     @Override
     public void resetLight(List<GUICoord> gUICoords, boolean isLight) {
-
+        this.gridView.resetLight( gUICoords,  isLight);
     }
 
     @Override
-    public void movePiece(GUICoord initCoord, GUICoord targetCoord) {
-
+    public
+    void movePiece(GUICoord initCoord, GUICoord targetCoord) {
+        this.gridView.movePiece(initCoord, targetCoord);
     }
 
     @Override
     public void undoMovePiece(GUICoord pieceToMoveInitCoord) {
-
+        this.gridView.undoMovePiece( pieceToMoveInitCoord);
     }
 
     @Override
     public String getPromotionType() {
-        return null;
+        return this.gridView.getPromotionType() ;
     }
 
     @Override
     public void promotePiece(GUICoord gUICoord, String promotionType) {
-
+        this.gridView.promotePiece( gUICoord,  promotionType);
     }
+
 }
