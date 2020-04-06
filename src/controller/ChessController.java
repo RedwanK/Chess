@@ -66,7 +66,12 @@ public interface ChessController {
 	 * (MouseReleased sur ChessSquareGui).
 	 */
 	public void actionsWhenPieceIsReleasedOnGui(GUICoord targetCoord) ;
-	
+
+	public boolean isTour();
+
+	public void setTour(boolean tour);
+
+	public void initializeTour();
 	
 	
 }

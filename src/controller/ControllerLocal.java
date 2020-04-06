@@ -8,7 +8,7 @@ import view.ChessView;
 public class ControllerLocal implements ChessControllerView, ChessControllerModel {
     private ChessModel model = null;
     private ChessView view = null;
-    private boolean tour = true;
+    private boolean tour;
     @Override
     public void setModel(ChessModel chessModel) {
         this.model = chessModel;
@@ -21,6 +21,7 @@ public class ControllerLocal implements ChessControllerView, ChessControllerMode
 
     @Override
     public boolean actionsWhenPieceIsSelectedOnGui(PieceSquareColor pieceSquareColor, GUICoord pieceToMoveCoord) {
+        System.out.println(isTour());
         if(pieceSquareColor.equals(PieceSquareColor.WHITE) && isTour())
         {
             setTour(false);
@@ -31,33 +32,36 @@ public class ControllerLocal implements ChessControllerView, ChessControllerMode
             setTour(true);
             return true;
         }
-        System.out.println("When piece is selected on GUI");
         return false;
     }
 
     @Override
     public boolean actionsWhenPieceIsDraggedOnGui(PieceSquareColor pieceSquareColor, GUICoord pieceToMoveCoord) {
 
-        System.out.println("When piece is dragged on GUI");
         return true;
     }
 
     @Override
     public void actionsWhenPieceIsMovedOnGui(GUICoord targetCoord) {
-        System.out.println("When piece is moved on GUI");
         //this.model.move(,targetCoord);
     }
 
     @Override
     public void actionsWhenPieceIsReleasedOnGui(GUICoord targetCoord) {
-        System.out.println("When piece is released on GUI");
     }
 
+    @Override
     public boolean isTour() {
         return tour;
     }
 
+    @Override
     public void setTour(boolean tour) {
         this.tour = tour;
+    }
+
+    @Override
+    public void initializeTour() {
+        this.tour = true;
     }
 }

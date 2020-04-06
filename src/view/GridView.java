@@ -38,6 +38,7 @@ public class GridView extends GridPane implements ChessView {
         nbColonne.bind(GuiFactory.nbColonne);
         nbLig = nbLigne.get();
         nbCol = nbColonne.get();
+        this.chessController.initializeTour();
 
         BorderPane square = null;
         ImageView piece = null;
@@ -81,22 +82,9 @@ public class GridView extends GridPane implements ChessView {
     }
 
     private void addPieceListener(ImageView piece) {
-
-        piece.setOnMousePressed(new EventHandler <MouseEvent>() {
-            public void handle(MouseEvent event) {
-
-                // Si la pièce sélectionnée appartient bien au joueur courant
-                // le controleur demande au damier d'allumer les cases de destinations possibles
-
-                GridView.this.chessController.actionsWhenPieceIsSelectedOnGui(((ChessPieceGui) piece).getCouleur(), ((ChessSquareGui) piece.getParent()).getCoord());
-                event.consume();
-
-            }
-        });
-
         piece.setOnDragDetected(new EventHandler <MouseEvent>() {
             public void handle(MouseEvent event) {
-                if(GridView.this.chessController.actionsWhenPieceIsDraggedOnGui(
+                if(GridView.this.chessController.actionsWhenPieceIsSelectedOnGui(
                         ((ChessPieceGui) piece).getCouleur(), ((ChessSquareGui) piece.getParent()).getCoord() )){
 
                     /* allow any transfer mode */
@@ -155,7 +143,7 @@ public class GridView extends GridPane implements ChessView {
                     // Le controller invoque la méthode move() du model
                     // si move OK, il deande à la vue de valider le déplacement
                     // sinon de repositionner la pièce à ses coordonnées initiales
-                    //chessController.actionsWhenPieceIsMovedOnGui(((ChessSquareGui) square).getCoord());
+                    chessController.actionsWhenPieceIsMovedOnGui(((ChessSquareGui) square).getCoord());
                     // le controller demande à la vue de rénitialiser
                     // les couleurs des cases de destinations possibles
                     //chessController.actionsWhenPieceIsReleasedOnGui(((ChessSquareGui) square).getCoord());
@@ -164,9 +152,7 @@ public class GridView extends GridPane implements ChessView {
                         currentImage.setVisible(true);
                         success = true;
                     } catch (Exception e) {
-                        ControllerLocal cl = (ControllerLocal) chessController;
-
-                        cl.setTour(cl.isTour() ? false : true);
+                        chessController.setTour(chessController.isTour() ? false : true);
                     }
                 }
                 /* let the source know whether the image was successfully
