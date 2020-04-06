@@ -1,9 +1,11 @@
 package view;
 
 import controller.ChessController;
+import controller.ControllerLocal;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.ImageView;
@@ -23,13 +25,11 @@ public class GridView extends GridPane implements ChessView {
     public  IntegerProperty nbColonne = new SimpleIntegerProperty();
     private int nbLig ;
     private int nbCol;
+    private ImageView currentImage;
 
 
     /**
-     * le constructeur construit les cases noires et blanches
-     * et positionne les images de pièces dessus
      * @param chessController
-     *
      */
     GridView(ChessController chessController) {
         super();
@@ -38,13 +38,6 @@ public class GridView extends GridPane implements ChessView {
         nbColonne.bind(GuiFactory.nbColonne);
         nbLig = nbLigne.get();
         nbCol = nbColonne.get();
-
-
-        //////////////////////////////////////////////////////////////////////////////
-        //
-        // Mise en forme du quadrillage et ajout des pièces sur le damier
-        //
-        //////////////////////////////////////////////////////////////////////////////
 
         BorderPane square = null;
         ImageView piece = null;
@@ -109,13 +102,25 @@ public class GridView extends GridPane implements ChessView {
                     /* allow any transfer mode */
                     Dragboard db = GridView.this.startDragAndDrop(TransferMode.ANY);
 
+                    piece.setVisible(false);
                     /* put a image on dragboard */
                     ClipboardContent content = new ClipboardContent();
                     content.putImage(((ImageView) piece).getImage());
                     db.setContent(content);
+
+                    currentImage = piece;
                 }
                 event.consume();
 
+            }
+        });
+
+        piece.setOnDragDone(new EventHandler <DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                piece.setVisible(true);
+
+                dragEvent.consume();
             }
         });
     }
@@ -150,11 +155,19 @@ public class GridView extends GridPane implements ChessView {
                     // Le controller invoque la méthode move() du model
                     // si move OK, il deande à la vue de valider le déplacement
                     // sinon de repositionner la pièce à ses coordonnées initiales
-                    chessController.actionsWhenPieceIsMovedOnGui(((ChessSquareGui) square).getCoord());
+                    //chessController.actionsWhenPieceIsMovedOnGui(((ChessSquareGui) square).getCoord());
                     // le controller demande à la vue de rénitialiser
                     // les couleurs des cases de destinations possibles
-                    chessController.actionsWhenPieceIsReleasedOnGui(((ChessSquareGui) square).getCoord());
+                    //chessController.actionsWhenPieceIsReleasedOnGui(((ChessSquareGui) square).getCoord());
+                    try {
+                        square.getChildren().add(currentImage);
+                        currentImage.setVisible(true);
+                        success = true;
+                    } catch (Exception e) {
+                        ControllerLocal cl = (ControllerLocal) chessController;
 
+                        cl.setTour(cl.isTour() ? false : true);
+                    }
                 }
                 /* let the source know whether the image was successfully
                  * transferred and used */
@@ -175,14 +188,6 @@ public class GridView extends GridPane implements ChessView {
         });
     }
 
-
-    //////////////////////////////////////////////////////////////////////////////
-    //
-    // Méthodes invoquées par le controller après réponse du model
-    // En réalité, le controller invoque les méthodes éponymes de la classe View
-    // qui propage l'appel au damier
-    //
-    //////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void resetLight(List<GUICoord> listGUICoords, boolean isLight) {
